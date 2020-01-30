@@ -6,30 +6,31 @@ namespace Builders
 {
     public class ClassBuilder
     {
-        private string _namesapceSection;
-        private string _classSection;
-        private string _constractorSection;
-        public string Build(string namespaceName, string className, IDictionary<string, string> constractorParams=null)
+        public string Build(string namespaceName, string className, IDictionary<string, string> constractorParams = null)
         {
-            InitClassSection(className,constractorParams);
-            InitNamespaceSection(namespaceName);
-            return _namesapceSection;
+            var interfaceSection = CreateInterfaceSection($"I{className}");
+            var classSection = CreateClassSection(className, constractorParams);
+            var namesapceSection = CreateNamespaceSection(namespaceName, interfaceSection, classSection);
+            return namesapceSection;
         }
-        private void InitNamespaceSection(string namespaceName)
+        private string CreateNamespaceSection(string namespaceName, string interfaceSection, string classSection)
         {
-            _namesapceSection = $"namespace {namespaceName}{{{_classSection}}}";
-        }
-        private void InitClassSection(string className, IDictionary<string, string> constractorParams)
-        {
-            InitConstructorSectio(className, constractorParams);
-            _classSection = $"public class {className}: I{className}{{{_constractorSection}}}";
-        }
-        private void InitConstructorSectio(string className, IDictionary<string, string> constractorParams)
-        {
-            var constractorParamsString = string.Join(",", constractorParams?.Select(x => $"{x.Key} {x.Value}"));
-            _constractorSection = $"public {className}({constractorParamsString})";
+            return $"namespace {namespaceName}{{{interfaceSection}{classSection}}}";
         }
 
-
+        private string CreateInterfaceSection(string interfaceName)
+        {
+            return $"public interface {interfaceName}{{}}";
+        }
+        private string CreateClassSection(string className, IDictionary<string, string> constractorParams)
+        {
+            var constructorSection = CreateConstructorSection(className, constractorParams);
+            return $"public class {className}: I{className}{{{constructorSection}}}";
+        }
+        private string CreateConstructorSection(string className, IDictionary<string, string> constractorParams)
+        {
+            var constractorParamsString = constractorParams == null ? string.Empty : string.Join(",", constractorParams.Select(x => $"{x.Key} {x.Value.Substring(0, 1).ToLower()}{x.Value.Substring(1)}"));
+            return $"public {className}({constractorParamsString}){{}}";
+        }
     }
 }
