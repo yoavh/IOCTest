@@ -67,6 +67,8 @@ namespace Builders
             _stopTimer = CreateStopTimer();
             _using.AppendLine("using System;");
             _using.AppendLine("using System.Diagnostics;");
+            _using.AppendLine("using Castle.Windsor;");
+            _using.AppendLine("using Castle.MicroKernel.Registration;");
 
             return this;
         }
