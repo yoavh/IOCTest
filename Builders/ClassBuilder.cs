@@ -65,7 +65,7 @@ namespace Builders
         }
         private string CreateMethodSection(string methodName, string body)
         {
-            return $"public void {methodName}(){{{Environment.NewLine}{body}{Environment.NewLine}}}";
+            return $"public WindsorContainer {methodName}(){{{Environment.NewLine}{body}{Environment.NewLine}}}";
         }
     }
 }

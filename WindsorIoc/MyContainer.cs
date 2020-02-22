@@ -20,6 +20,6 @@ namespace WindsorIoc
     }
 }
 
-// container.Register(Component.For<IMyContainer>().ImplementedBy<MyContainer>().LifestyleSingleton());
-// var mycontainer = container.Resolve<IMyContainer>();
-//             mycontainer.Init(container);
+// // container.Register(Component.For<IMyContainer>().ImplementedBy<MyContainer>().LifestyleSingleton());
+// // var mycontainer = container.Resolve<IMyContainer>();
+// //             mycontainer.Init(container);

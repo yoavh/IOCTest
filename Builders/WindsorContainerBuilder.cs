@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Text;
+
 
 namespace Builders
 {
@@ -18,6 +20,7 @@ namespace Builders
             _using = new StringBuilder();
             _registerationSection = new StringBuilder();
             _resolverSection = new StringBuilder();
+            this.WithUsing(new[] { "Castle.Windsor", "Castle.MicroKernel.Registration" });
         }
 
         public string GetUsingSection()
@@ -44,6 +47,7 @@ namespace Builders
             {
                 build.AppendLine(_stopTimer);
             }
+            build.AppendLine($"return {_containerName};");
             return build.ToString();
         }
         public WindsorContainerBuilder AddRegisteration(string interfaceName, string className)
@@ -65,11 +69,16 @@ namespace Builders
             withTimer = true;
             _startTimer = CreateStartTimer();
             _stopTimer = CreateStopTimer();
-            _using.AppendLine("using System;");
-            _using.AppendLine("using System.Diagnostics;");
-            _using.AppendLine("using Castle.Windsor;");
-            _using.AppendLine("using Castle.MicroKernel.Registration;");
+            this.WithUsing(new[] { "System", "System.Diagnostics" });
+            return this;
+        }
 
+        public WindsorContainerBuilder WithUsing(IEnumerable<string> useses)
+        {
+            foreach (var item in useses)
+            {
+                _using.AppendLine($"using {item};");
+            }
             return this;
         }
         private string CreateRegister(string interfaceName, string className)

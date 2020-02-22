@@ -9,13 +9,16 @@ namespace BuildersTests
 {
     public class ClassBuilderTest
     {
+        int maxConstructor = 50;
+        int firstInt = 10;
+        int secondInt = 15;
         [Fact]
         public void CreateClass()
         {
             var classesToCreate = new List<string>{
                         "Yoav1","Yoav2"
                     };
-            var folderPath = "/Users/yoavhagashi/IOCTest/WindsorIoc";
+            var folderPath = "/Users/yoavhagashi/Project/IOCTest/WindsorIoc";
             var builder = new ClassBuilder();
             var writer = new ClassWriter();
             var windsorContainerFactory = new WindsorContainerFactory();
@@ -37,8 +40,6 @@ namespace BuildersTests
         public void CreateWindsorContainerBuilderInjection()
         {
             var apperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            var firstInt = 3;
-            var secondInt = 3;
             var classesToCreate = new List<string>();
             for (var i = 0; i < apperCase.Length; i++)
             {
@@ -47,12 +48,12 @@ namespace BuildersTests
                     for (var k = 0; k < secondInt; k++)
                     {
                         var className = $"{apperCase[i]}{j}{k}";
-                        classesToCreate.Add(className);
+                        classesToCreate.Add($"{className}Inject");
                     }
                 }
             }
             var nameSpace = "WindsorIoc";
-            var folderPath = $"/Users/yoavhagashi/IOCTest/{nameSpace}";
+            var folderPath = $"/Users/yoavhagashi/Project/IOCTest/{nameSpace}";
             var builder = new ClassBuilder();
             var writer = new ClassWriter();
             var windsorContainerBuilder = new WindsorContainerBuilder();
@@ -64,14 +65,14 @@ namespace BuildersTests
                 writer.Write(path, newClass);
                 constractorParams.Add($"I{className}", className);
                 windsorContainerBuilder.AddRegisteration($"I{className}", className);
-                windsorContainerBuilder.AddResolve($"I{className}");
+                // windsorContainerBuilder.AddResolve($"I{className}");
 
-                if (constractorParams.Count >= 10)
+                if (constractorParams.Count >= maxConstructor)
                 {
                     constractorParams.Clear();
                 }
             }
-            windsorContainerBuilder.WithTimer();
+            // windsorContainerBuilder.WithTimer();
             var containerTestMethod = windsorContainerBuilder.Build();
             var windsorContainerTestnewClass = builder.Build(nameSpace, "WindsorContainerTestInjection",true, null, new Dictionary<string, string> { { "TestContainer", containerTestMethod } }, windsorContainerBuilder.GetUsingSection());
             var pathWindsorContainerTest = Path.Join(folderPath, $"WindsorContainerTestInjection.cs");
@@ -82,8 +83,6 @@ namespace BuildersTests
         public void CreateWindsorContainerBuilderResolver()
         {
             var apperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            var firstInt = 3;
-            var secondInt = 3;
             var classesToCreate = new List<string>();
             for (var i = 0; i < apperCase.Length; i++)
             {
@@ -97,7 +96,7 @@ namespace BuildersTests
                 }
             }
             var nameSpace = "WindsorIoc";
-            var folderPath = $"/Users/yoavhagashi/IOCTest/{nameSpace}";
+            var folderPath = $"/Users/yoavhagashi/Project/IOCTest/{nameSpace}";
             var builder = new ClassBuilder();
             var writer = new ClassWriter();
             var windsorContainerBuilder = new WindsorContainerBuilder();
@@ -112,14 +111,14 @@ namespace BuildersTests
                 writer.Write(path, newClass);
                 constractorParams.Add($"I{className}", className);
                 windsorContainerBuilder.AddRegisteration($"I{className}", className);
-                windsorContainerBuilder.AddResolve($"I{className}");
+                // windsorContainerBuilder.AddResolve($"I{className}");
 
-                if (constractorParams.Count >= 10)
+                if (constractorParams.Count >= maxConstructor)
                 {
                     constractorParams.Clear();
                 }
             }
-            windsorContainerBuilder.WithTimer();
+            // windsorContainerBuilder.WithTimer();
             var containerTestMethod = windsorContainerBuilder.Build();
             var windsorContainerTestnewClass = builder.Build(nameSpace, "WindsorContainerTestResolve",true, null, new Dictionary<string, string> { { "TestContainer", containerTestMethod } }, windsorContainerBuilder.GetUsingSection());
             var pathWindsorContainerTest = Path.Join(folderPath, $"WindsorContainerTestResolve.cs");

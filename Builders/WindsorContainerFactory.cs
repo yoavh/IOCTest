@@ -14,9 +14,11 @@ namespace Builders
             var _createResolve = new StringBuilder();
             foreach (var inplementation in inplementations)
             {
-                _createRegister.AppendLine(CreateRegister(containerName, inplementation.Key, inplementation.Value));
+                // _createRegister.AppendLine(CreateRegister(containerName, inplementation.Key, inplementation.Value));
                 _createResolve.AppendLine(CreateResolve(containerName, inplementation.Key, inplementation.Value));
             }
+
+            _createRegister.AppendLine($"{containerName}.Register(AllTypes.FromAssembly(Assembly.GetExecutingAssembly()))");
             var body = new StringBuilder();
             body.AppendLine(CreateContainer(containerName));
             body.AppendLine(_createRegister.ToString());
@@ -26,7 +28,7 @@ namespace Builders
         }
         private string CreateContainer(string containerName)
         {
-            return $"var {containerName} = new WindsorContainer();";
+            return $"var {containerName} = new WindsorContainer()";
         }
         private string CreateRegister(string containerName, string interfaceName, string className)
         {
